@@ -5,85 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon Hub Créatif</title>
     <style>
-        /* Style de base */
         body, html { 
-            margin: 0; 
-            padding: 0; 
-            height: 100%; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: #ffffff; 
-            overflow: hidden;
+            margin: 0; padding: 0; height: 100%; 
+            font-family: 'Segoe UI', sans-serif; background: #ffffff; overflow: hidden;
         }
 
-        /* Bouton Menu (Côté gauche) */
+        /* Bouton Menu discret à gauche */
         .menu-toggle {
-            position: fixed;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #333;
-            color: white;
-            padding: 20px 12px;
-            cursor: pointer;
-            border-radius: 0 10px 10px 0;
-            z-index: 1000;
-            font-size: 20px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-            transition: background 0.3s;
+            position: fixed; left: 0; top: 50%; transform: translateY(-50%);
+            background: #333; color: white; padding: 20px 12px;
+            cursor: pointer; border-radius: 0 10px 10px 0; z-index: 1000;
+            font-size: 20px; box-shadow: 2px 0 5px rgba(0,0,0,0.2);
         }
-        .menu-toggle:hover { background: #000; }
 
-        /* Barre latérale (Sidebar) */
+        /* Barre latérale */
         .sidebar {
-            position: fixed;
-            left: -260px; /* Caché par défaut */
-            top: 0;
-            width: 250px;
-            height: 100%;
-            background: #1a1a1a;
-            color: white;
-            transition: all 0.4s ease;
-            z-index: 999;
-            padding-top: 80px;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+            position: fixed; left: -260px; top: 0; width: 250px; height: 100%;
+            background: #1a1a1a; color: white; transition: 0.4s; z-index: 999;
+            padding-top: 80px; box-shadow: 5px 0 15px rgba(0,0,0,0.3);
         }
-
         .sidebar.active { left: 0; }
 
-        /* Liens du menu */
         .sidebar a {
-            display: block;
-            padding: 15px 30px;
-            color: #ecf0f1;
-            text-decoration: none;
-            font-size: 18px;
-            border-bottom: 1px solid #2c3e50;
-            transition: 0.2s;
+            display: block; padding: 15px 30px; color: #ecf0f1;
+            text-decoration: none; font-size: 18px; border-bottom: 1px solid #2c3e50;
         }
+        .sidebar a:hover { background: #34495e; color: #2ecc71; }
 
-        .sidebar a:hover {
-            background: #34495e;
-            padding-left: 40px;
-            color: #2ecc71;
-        }
-
-        /* Contenu principal (Page vide au début) */
+        /* Page d'accueil vide */
         .content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            color: #7f8c8d;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; text-align: center; color: #7f8c8d;
         }
 
-        /* Overlay pour fermer le menu en cliquant à côté */
         .overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.3);
-            z-index: 998;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3); z-index: 998;
         }
         .overlay.active { display: block; }
     </style>
@@ -91,7 +48,6 @@
 <body>
 
     <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
     <div class="sidebar" id="sidebar">
@@ -102,8 +58,8 @@
 
     <div class="content">
         <div>
-            <h1>Espace de Travail</h1>
-            <p>Ouvrez le menu sur la gauche pour choisir un outil.</p>
+            <h1>Espace Personnel</h1>
+            <p>Utilisez le menu à gauche pour naviguer.</p>
         </div>
     </div>
 
@@ -113,6 +69,5 @@
             document.getElementById('overlay').classList.toggle('active');
         }
     </script>
-
 </body>
 </html>
