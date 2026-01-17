@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Editeur Plein Écran</title>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <style>
+        /* On supprime les marges par défaut du navigateur */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* Empêche le double scroll */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* L'éditeur prend tout l'espace restant */
+        #editor {
+            flex-grow: 1;
+            border: none;
+        }
+
+        /* La barre d'outils de Quill */
+        .ql-toolbar {
+            border: none !important;
+            background: #f0f0f0;
+        }
+
+        /* Le conteneur du bouton en bas */
+        .footer {
+            padding: 10px;
+            background: #ddd;
+            display: flex;
+            justify-content: center;
+        }
+
+        button {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div id="editor">
+  <p>Votre texte en plein écran...</p>
+</div>
+
+<div class="footer">
+    <button id="btnSave">Enregistrer sur l'ordinateur</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+<script>
+  const quill = new Quill('#editor', {
+    theme: 'snow'
+  });
+
+  document.getElementById('btnSave').onclick = function() {
+     const htmlContent = quill.root.innerHTML;
+     const blob = new Blob([htmlContent], { type: 'text/html' });
+     const url = URL.createObjectURL(blob);
+
+     const link = document.createElement('a');
+     link.href = url;
+     link.download = 'mon-document.html';
+     link.click();
+
+     URL.revokeObjectURL(url);
+  };
+</script>
+
+</body>
+</html>

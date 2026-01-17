@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mon Hub Créatif</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; font-family: sans-serif; background: #f9f9f9; }
+
+        /* Le bouton sur le côté */
+        .menu-toggle {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #333;
+            color: white;
+            padding: 15px 10px;
+            cursor: pointer;
+            border-radius: 0 10px 10px 0;
+            z-index: 1000;
+            transition: 0.3s;
+        }
+
+        .menu-toggle:hover { background: #555; padding-left: 20px; }
+
+        /* Le menu latéral caché */
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background: #222;
+            color: white;
+            transition: 0.3s;
+            z-index: 999;
+            padding-top: 60px;
+        }
+
+        .sidebar.active { left: 0; }
+
+        .sidebar a {
+            display: block;
+            padding: 15px 25px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 18px;
+            border-bottom: 1px solid #333;
+        }
+
+        .sidebar a:hover { background: #333; color: white; }
+
+        /* Zone de contenu */
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+    <div class="sidebar" id="sidebar">
+        <a href="#" onclick="showPage('home')">Accueil</a>
+        <a href="carte.html">Carte Mentale</a>
+        <a href="editeur.html">Éditeur de Texte</a>
+    </div>
+
+    <div class="content" id="main-content">
+        <div>
+            <h1>Bienvenue</h1>
+            <p>Cliquez sur le menu à gauche pour commencer.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function showPage(page) {
+            toggleMenu(); // Ferme le menu après clic
+            // Ici tu peux ajouter de la logique pour changer le texte au centre
+        }
+    </script>
+</body>
+</html>
