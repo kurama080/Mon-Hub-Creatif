@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Communauté - Partagez vos créations</title>
+    <style>
+        body { font-family: sans-serif; padding: 40px; line-height: 1.6; max-width: 800px; margin: auto; }
+        .back-btn { text-decoration: none; color: #333; font-weight: bold; border: 1px solid #333; padding: 10px; border-radius: 5px; }
+        h1 { color: #2c3e50; }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">← Retour à l'accueil</a>
+
+    <h1>Le Mur des Créations</h1>
+    <p>Postez ici vos captures d'écran de cartes mentales ou copiez-collez vos textes !</p>
+
+    <div id="disqus_thread"></div>
+
+    <script>
+        var disqus_config = function () {
+            this.page.url = window.location.href;
+            this.page.identifier = "communaute";
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = 'https://TON-NOM-DISQUS.disqus.com/embed.js'; // Tu devras créer un compte gratuit sur Disqus pour avoir ce lien
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+</body>
+</html>
