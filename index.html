@@ -2,101 +2,91 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon Hub Créatif</title>
     <style>
-        body, html { 
-            margin: 0; padding: 0; height: 100%; 
-            font-family: 'Segoe UI', sans-serif; background: #ffffff; overflow: hidden;
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f0f2f5;
         }
 
-        /* Bouton Menu discret à gauche */
-        .menu-toggle {
-            position: fixed; left: 0; top: 50%; transform: translateY(-50%);
-            background: #333; color: white; padding: 20px 12px;
-            cursor: pointer; border-radius: 0 10px 10px 0; z-index: 1000;
-            font-size: 20px; box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-        }
-
-        /* Barre latérale */
+        /* Barre latérale stylée */
         .sidebar {
-            position: fixed; left: -260px; top: 0; width: 250px; height: 100%;
-            background: #1a1a1a; color: white; transition: 0.4s; z-index: 999;
-            padding-top: 80px; box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         }
-        .sidebar.active { left: 0; }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 10px;
+        }
 
         .sidebar a {
-            display: block; padding: 15px 30px; color: #ecf0f1;
-            text-decoration: none; font-size: 18px; border-bottom: 1px solid #2c3e50;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            margin: 5px 0;
+            border-radius: 8px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
         }
-        .sidebar a:hover { background: #34495e; color: #2ecc71; }
 
-        /* Page d'accueil vide */
-        .content {
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh; text-align: center; color: #7f8c8d;
+        .sidebar a:hover {
+            background-color: #34495e;
+            transform: translateX(5px);
         }
 
-        .overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.3); z-index: 998;
+        /* Contenu principal */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
-        .overlay.active { display: block; }
+
+        .welcome-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 600px;
+        }
+
+        h1 { color: #2c3e50; margin-bottom: 10px; }
+        p { color: #7f8c8d; line-height: 1.6; }
     </style>
 </head>
 <body>
-.links a {
-    display: block;
-    background-color: #ffffff;
-    color: #2c3e50;
-    padding: 15px;
-    margin: 10px 0;
-    text-decoration: none;
-    border-radius: 10px;
-    font-weight: bold;
-    transition: all 0.3s ease; /* Animation fluide */
-    border: 2px solid #2c3e50;
-}
 
-.links a:hover {
-    background-color: #2c3e50;
-    color: #ffffff;
-    transform: translateY(-3px); /* Le bouton monte un peu */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Ombre portée */
-}
+    <div class="sidebar">
+        <h2>🚀 MENU</h2>
+        <a href="Carte-Mentale.html" target="_blank">🧠 Carte Mentale</a>
+        <a href="Editeur-de-texte.html" target="_blank">📝 Éditeur de texte</a>
+        <a href="communaute.html" target="_blank">🌐 Communauté</a>
+    </div>
 
-<a href="index.html" class="btn-retour">← Retour au Hub</a>
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-
-<div class="links">
-    <a href="Carte-Mentale.html" target="_blank">🧠 Carte Mentale</a>
-    <a href="Editeur-de-texte.html" target="_blank">📝 Éditeur de texte</a>
-    <a href="communaute.html" target="_blank">🌐 Communauté</a>
-</div>
-
-    <div class="content">
-        <div>
-            <h1>Espace Personnel</h1>
-            <p>Utilisez le menu à gauche pour naviguer.</p>
+    <div class="main-content">
+        <div class="welcome-card">
+            <h1>Bienvenue sur ton Hub</h1>
+            <p>Choisis un outil dans le menu à gauche pour commencer à travailler. Tes projets s'ouvriront dans un nouvel onglet pour ne pas perdre cette page !</p>
         </div>
     </div>
 
-    <script>
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
-        }
-    </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
