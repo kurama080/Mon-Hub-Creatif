@@ -21,15 +21,17 @@
             position: fixed;
             top: 20px;
             left: 20px;
-            font-size: 24px;
+            font-size: 18px;
             background: #2c3e50;
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
+            padding: 12px 20px;
+            border-radius: 30px; /* Plus arrondi, plus moderne */
             cursor: pointer;
             z-index: 1000;
             transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-weight: bold;
         }
         .menu-btn:hover { background: #34495e; transform: scale(1.05); }
 
@@ -37,43 +39,46 @@
         .sidebar {
             position: fixed;
             top: 0;
-            left: -300px; /* Cachée par défaut */
+            left: -300px; 
             width: 280px;
             height: 100%;
             background: #2c3e50;
             color: white;
-            transition: 0.4s ease;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 999;
             padding-top: 80px;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+            box-shadow: 5px 0 25px rgba(0,0,0,0.3);
         }
 
         .sidebar.open {
-            left: 0; /* On l'affiche */
+            left: 0;
         }
 
         .sidebar h2 {
             text-align: center;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             margin-bottom: 30px;
             color: #3498db;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .sidebar a {
             display: flex;
             align-items: center;
-            padding: 15px 25px;
-            color: white;
+            padding: 18px 25px;
+            color: #ecf0f1;
             text-decoration: none;
             font-size: 1.1rem;
             transition: 0.3s;
-            border-left: 4px solid transparent;
+            border-left: 5px solid transparent;
         }
 
         .sidebar a:hover {
             background: #34495e;
-            border-left: 4px solid #3498db;
+            border-left: 5px solid #3498db;
             padding-left: 35px;
+            color: white;
         }
 
         .sidebar .icon { margin-right: 15px; font-size: 20px; }
@@ -81,59 +86,58 @@
         /* CONTENU PRINCIPAL */
         .main-content {
             text-align: center;
-            transition: 0.4s;
         }
 
-        h1 { font-size: 3rem; color: #2c3e50; margin: 0; }
-        p { color: #7f8c8d; font-size: 1.2rem; }
+        h1 { font-size: 3.5rem; color: #2c3e50; margin: 0; letter-spacing: -2px; }
+        p { color: #7f8c8d; font-size: 1.2rem; margin-top: 10px; }
 
-        /* OVERLAY (Pour fermer en cliquant à côté) */
+        /* OVERLAY */
         .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.5);
             display: none;
             z-index: 998;
+            backdrop-filter: blur(3px); /* Flou d'arrière-plan */
         }
         .overlay.show { display: block; }
     </style>
 </head>
 <body>
 
-    <button class="menu-btn" onclick="toggleMenu()">☰ Menu</button>
+    <button class="menu-btn" onclick="toggleMenu()">☰ MENU</button>
 
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
     <nav class="sidebar" id="sidebar">
-        <h2>🚀 NAVIGATION</h2>
+        <h2>Navigation</h2>
         <a href="workspace.html">
             <span class="icon">🛠️</span> Espace Créatif
         </a>
         <a href="communaute.html">
             <span class="icon">🌐</span> Communauté
         </a>
-        <a href="#" onclick="toggleMenu()" style="margin-top: 50px; color: #e74c3c;">
-            <span class="icon">✖</span> Fermer
+        <a href="#" onclick="toggleMenu()" style="margin-top: 40px; color: #e74c3c; font-size: 0.9rem;">
+            <span class="icon">✕</span> FERMER LE MENU
         </a>
     </nav>
 
-    <div class="main-content" id="content">
+    <div class="main-content">
         <h1>Bienvenue</h1>
-        <p>Clique sur le menu en haut à gauche pour explorer tes outils.</p>
+        <p>Prêt à créer quelque chose aujourd'hui ?</p>
     </div>
 
     <script>
         function toggleMenu() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('overlay');
-            
             sidebar.classList.toggle('open');
             overlay.classList.toggle('show');
         }
     </script>
 
 </body>
-</html>
+</html>v
