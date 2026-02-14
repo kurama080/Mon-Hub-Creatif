@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mon Espace Créatif Flexible</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; overflow: hidden; background-color: #f0f2f5; }
+        
+        /* BARRE DE NAVIGATION */
+        .navbar { 
+            height: 55px; 
+            background-color: #2c3e50; 
+            display: flex; 
+            align-items: center; 
+            padding: 0 20px; 
+            color: white; 
+            z-index: 100; 
+            justify-content: space-between;
+        }
+
+        .nav-left, .nav-right { display: flex; align-items: center; gap: 15px; }
+
+        .btn-retour { color: white; text-decoration: none; border: 1px solid white; padding: 5px 12px; border-radius: 5px; font-size: 14px; }
+        
+        /* BOUTONS DE VUE */
+        .view-controls { display: flex; background: #34495e; border-radius: 8px; padding: 3px; }
+        .view-btn { 
+            border: none; background: none; color: #bdc3c7; padding: 6px 12px; 
+            cursor: pointer; border-radius: 6px; font-weight: bold; transition: 0.3s;
+        }
+        .view-btn.active { background: #3498db; color: white; }
+
+        /* CONTENEUR PRINCIPAL */
+        .main-container { display: flex; height: calc(100vh - 55px); width: 100%; transition: 0.3s; }
+
+        /* SECTIONS */
+        .editor-container { width: 30%; background: white; border-right: 2px solid #ddd; display: flex; flex-direction: column; padding: 15px; transition: 0.3s; }
+        .mindmap-container { width: 70%; position: relative; overflow: hidden; background: #f8f9fa; transition: 0.3s; }
+
+        /* ÉTATS DES VUES */
+        body.view-editor .editor-container { width: 100%; border: none; }
+        body.view-editor .mindmap-container { width: 0%; display: none; }
+
+        body.view-mindmap .editor-container { width: 0%; display: none; }
+        body.view-mindmap .mindmap-container { width: 100%; }
+
+        body.view-split .editor-container { width: 35%; display: flex; }
+        body.view-split .mindmap-container { width: 65%; display: block; }
+
+        /* STYLE DES BULLES & CANVAS */
+        #line-canvas { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 1; }
+        textarea { flex: 1; border: 1px solid #ddd; border-radius: 8px; padding: 10px; resize: none; outline: none; font-size: 16px; }
+        .node {
+            position: absolute; background: white; border: 2px solid #3498db; border-radius: 50px;
+            padding: 10px 20px; min-width: 80px; text-align: center; cursor: grab;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-weight: bold; z-index: 5; display: flex; align-items: center;
+        }
+        .node.root { border: 3px solid #2c3e50; background-color: #ecf0f1; }
+        .node:hover .node-actions { display: flex; }
+        .node-actions { position: absolute; top: -25px; right: 0; display: none; gap: 5px; }
+        .action-btn { width: 24px; height: 24px; border-radius: 50%; border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .add-btn { background: #2ecc71; }
+        .del-btn { background: #e74c3c; }
+    </style>
+</head>
+<body class="view-split"> <div class="navbar">
+    <div class="nav-left">
+        <a href="index.html" class="btn-retour">← Retour</a>
+        <span style="font-weight: bold;">MON ESPACE</span>
+    </div>
+
+    <div class="view-controls">
+        <button class="view-btn" onclick="setView('view-editor', this)">📝 Texte Seul</button>
+        <button class="view-btn active" onclick="setView('view-split', this)">🌓 Assemblé</button>
+        <button class="view-btn" onclick="setView('view-mindmap', this)">🧠 Carte Seule</button>
+    </div>
+
+    <div class="nav-right">
+        <span id="status" style="font-size: 12px; opacity: 0.7;">Mode Assemblé</span>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="editor-container">
+        <h2 style="font-size: 18px; margin-top: 0;">Notes</h2>
+        <textarea placeholder="Prends tes notes ici..."></textarea>
+    </div>
+
+    <div class="mindmap-container" id="canvas-area">
+        <canvas id="line-canvas"></canvas>
+    </div>
+</div>
+
+<script>
+    const canvasArea = document.getElementById('canvas-area');
+    const lineCanvas = document.getElementById('line-canvas');
+    const ctx = lineCanvas.getContext('2d');
+    let nodes = [];
+
+    // --- LOGIQUE DES VUES ---
+    function setView(viewMode, btn) {
+        document.body.className = viewMode; // Change la classe du body
+        
+        // Gérer l'état actif des boutons
+        document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Mettre à jour le canvas après le changement de taille
+        setTimeout(resizeCanvas, 300);
+    }
+
+    // --- LOGIQUE CARTE MENTALE ---
+    function resizeCanvas() {
+        lineCanvas.width = canvasArea.offsetWidth;
+        lineCanvas.height = canvasArea.offsetHeight;
+        drawLines();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function createNode(text, x, y, parentNode = null, isRoot = false) {
+        const nodeObj = { id: Date.now() + Math.random(), parent: parentNode, element: document.createElement('div') };
+        const el = nodeObj.element;
+        el.className = isRoot ? 'node root' : 'node';
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+
+        const span = document.createElement('span');
+        span.contentEditable = true;
+        span.innerText = text;
+        el.appendChild(span);
+
+        const actions = document.createElement('div');
+        actions.className = 'node-actions';
+        const addBtn = document.createElement('button');
+        addBtn.className = 'action-btn add-btn'; addBtn.innerText = '+';
+        addBtn.onclick = (e) => { e.stopPropagation(); createNode("Nouvelle idée", el.offsetLeft + 150, el.offsetTop + 50, nodeObj); };
+        actions.appendChild(addBtn);
+
+        if (!isRoot) {
+            const delBtn = document.createElement('button');
+            delBtn.className = 'action-btn del-btn'; delBtn.innerText = '×';
+            delBtn.onclick = (e) => { e.stopPropagation(); removeNodeWithChildren(nodeObj); drawLines(); };
+            actions.appendChild(delBtn);
+        }
+
+        el.appendChild(actions);
+        makeDraggable(el, nodeObj);
+        canvasArea.appendChild(el);
+        nodes.push(nodeObj);
+        drawLines();
+    }
+
+    function removeNodeWithChildren(nodeToDelete) {
+        nodes.filter(n => n.parent === nodeToDelete).forEach(child => removeNodeWithChildren(child));
+        nodeToDelete.element.remove();
+        nodes = nodes.filter(n => n !== nodeToDelete);
+    }
+
+    function drawLines() {
+        ctx.clearRect(0, 0, lineCanvas.width, lineCanvas.height);
+        ctx.strokeStyle = '#bdc3c7'; ctx.lineWidth = 2;
+        nodes.forEach(node => {
+            if (node.parent) {
+                const startX = node.parent.element.offsetLeft + (node.parent.element.offsetWidth / 2);
+                const startY = node.parent.element.offsetTop + (node.parent.element.offsetHeight / 2);
+                const endX = node.element.offsetLeft + (node.element.offsetWidth / 2);
+                const endY = node.element.offsetTop + (node.element.offsetHeight / 2);
+                ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(endX, endY); ctx.stroke();
+            }
+        });
+    }
+
+    function makeDraggable(el, nodeObj) {
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        el.onmousedown = (e) => {
+            if (e.target.contentEditable === "true" || e.target.tagName === 'BUTTON') return;
+            pos3 = e.clientX; pos4 = e.clientY;
+            document.onmouseup = () => { document.onmouseup = null; document.onmousemove = null; };
+            document.onmousemove = (e) => {
+                pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY;
+                pos3 = e.clientX; pos4 = e.clientY;
+                el.style.top = (el.offsetTop - pos2) + "px"; el.style.left = (el.offsetLeft - pos1) + "px";
+                drawLines();
+            };
+        };
+    }
+
+    window.onload = () => {
+        resizeCanvas();
+        createNode("SUJET CENTRAL", canvasArea.offsetWidth / 2 - 50, canvasArea.offsetHeight / 2 - 20, null, true);
+    };
+</script>
+
+</body>
+</html>
