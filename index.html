@@ -7,99 +7,133 @@
     <style>
         body {
             margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f7f6;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            color: #2c3e50;
+            overflow: hidden;
         }
 
-        .hub-container {
+        /* BOUTON POUR OUVRIR LE MENU */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: 0.3s;
+        }
+        .menu-btn:hover { background: #34495e; transform: scale(1.05); }
+
+        /* LA BARRE LATÉRALE (SIDEBAR) */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px; /* Cachée par défaut */
+            width: 280px;
+            height: 100%;
+            background: #2c3e50;
+            color: white;
+            transition: 0.4s ease;
+            z-index: 999;
+            padding-top: 80px;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+        }
+
+        .sidebar.open {
+            left: 0; /* On l'affiche */
+        }
+
+        .sidebar h2 {
             text-align: center;
-            max-width: 900px;
-            padding: 20px;
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #3498db;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            letter-spacing: -1px;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            color: #5d6d7e;
-            margin-bottom: 40px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 35px;
-            border-radius: 20px;
-            text-decoration: none;
-            color: inherit;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
+        .sidebar a {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            border: 1px solid rgba(255,255,255,0.3);
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            border-left: 4px solid transparent;
         }
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-            border-color: #3498db;
+        .sidebar a:hover {
+            background: #34495e;
+            border-left: 4px solid #3498db;
+            padding-left: 35px;
         }
 
-        .icon {
-            font-size: 50px;
-            margin-bottom: 20px;
+        .sidebar .icon { margin-right: 15px; font-size: 20px; }
+
+        /* CONTENU PRINCIPAL */
+        .main-content {
+            text-align: center;
+            transition: 0.4s;
         }
 
-        .card h2 {
-            margin: 10px 0;
-            font-size: 1.4rem;
-        }
+        h1 { font-size: 3rem; color: #2c3e50; margin: 0; }
+        p { color: #7f8c8d; font-size: 1.2rem; }
 
-        .card p {
-            font-size: 0.95rem;
-            color: #7f8c8d;
-            line-height: 1.5;
-            margin: 0;
+        /* OVERLAY (Pour fermer en cliquant à côté) */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            display: none;
+            z-index: 998;
         }
+        .overlay.show { display: block; }
     </style>
 </head>
 <body>
 
-    <div class="hub-container">
-        <h1>🚀 Mon Hub Créatif</h1>
-        <p class="subtitle">Tous tes outils de réflexion réunis au même endroit.</p>
+    <button class="menu-btn" onclick="toggleMenu()">☰ Menu</button>
 
-        <div class="grid">
-            <a href="workspace.html" class="card">
-                <div class="icon">🛠️</div>
-                <h2>Espace Créatif</h2>
-                <p>Combine l'éditeur de texte et la carte mentale intuitive pour organiser tes idées.</p>
-            </a>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-            <a href="communaute.html" class="card">
-                <div class="icon">🌐</div>
-                <h2>Communauté</h2>
-                <p>Partage tes travaux, pose des questions et collabore avec les autres membres.</p>
-            </a>
-        </div>
+    <nav class="sidebar" id="sidebar">
+        <h2>🚀 NAVIGATION</h2>
+        <a href="workspace.html">
+            <span class="icon">🛠️</span> Espace Créatif
+        </a>
+        <a href="communaute.html">
+            <span class="icon">🌐</span> Communauté
+        </a>
+        <a href="#" onclick="toggleMenu()" style="margin-top: 50px; color: #e74c3c;">
+            <span class="icon">✖</span> Fermer
+        </a>
+    </nav>
+
+    <div class="main-content" id="content">
+        <h1>Bienvenue</h1>
+        <p>Clique sur le menu en haut à gauche pour explorer tes outils.</p>
     </div>
+
+    <script>
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+    </script>
 
 </body>
 </html>
